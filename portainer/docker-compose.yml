@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  portainer:
+    image: portainer/portainer-ce
+    ports: 
+      - "8000:8000"
+      - "9000:9000"
+    container_name: portainer
+    environment:
+      - VIRTUAL_HOST=portainer.plambert.dev
+      - VIRTUAL_PORT=9000
+      - LETSENCRYPT_HOST=portainer.plambert.dev
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
+
+volumes:
+  portainer_data:
