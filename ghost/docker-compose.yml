@@ -17,11 +17,8 @@ services:
       - LETSENCRYPT_HOST=blog.plambert.dev
     ports:
       - "2368:2368"
-    networks:
-      - ghost
-      - nginx-proxy
     depends_on:
-      - db
+      - mysqldb
     restart: unless-stopped
 
   mysqldb:
@@ -33,8 +30,6 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    networks:
-      - ghost
     restart: unless-stopped
 
 networks:

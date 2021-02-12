@@ -16,6 +16,10 @@ services:
       - VIRTUAL_HOST=chronograf.plambert.dev
       - VIRTUAL_PORT=8888
       - LETSENCRYPT_HOST=chronograf.plambert.dev
+      - TOKEN_SECRET=${TOKEN_SECRET}
+      - GH_CLIENT_ID=${GH_CLIENT_ID}
+      - GH_CLIENT_SECRET=${GH_CLIENT_SECRET}
+      - GH_ORGS=${GH_ORGS}
   influxdb:
     image: influxdb:latest
     container_name: influxdb
