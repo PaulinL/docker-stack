@@ -1,0 +1,48 @@
+version: '3.1'
+
+services:
+  ghost:
+    image: ghost
+    volumes:
+      - ghost_data:/var/lib/ghost/content
+    environment:
+      - url=https://blog.plambert.dev
+      - database__client=mysql
+      - database__connection__host=mysqldb
+      - database__connection__user=${MYSQL_USER}
+      - database__connection__password=${MYSQL_PASSWORD}
+      - database__connection__database=${MYSQL_DATABASE}
+      - VIRTUAL_HOST=blog.plambert.dev
+      - VIRTUAL_PORT=2368
+      - LETSENCRYPT_HOST=blog.plambert.dev
+    ports:
+      - "2368:2368"
+    networks:
+      - ghost
+      - nginx-proxy
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  mysqldb:
+    image: mariadb
+    volumes:
+      - ghostdb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - ghost
+    restart: unless-stopped
+
+networks:
+  ghost:
+  default:
+    external:
+      name: nginx-proxy
+
+volumes:
+  ghostdb:
+  ghost_data:
